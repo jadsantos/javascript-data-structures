@@ -69,4 +69,25 @@ describe('LinkedList', function() {
             list.insert('1', 1);
         }).toThrow(new Error('OutOfBoundsException: index 1 is not within 0 and 0'));
     });
+    
+    it('should get an element at a given index', function() {
+        list.insert('1', 0);
+        list.insert('2', 0);
+        list.insert('3', 0);
+        expect(list.get(1)).toEqual('2');
+    });
+    
+    it('should get the first element', function() {
+        list.insert('1', 0);
+        list.insert('2', 0);
+        list.insert('3', 0);
+        expect(list.get(0)).toEqual('3');
+    });
+    
+    it('should get the last element', function() {
+        list.insert('1', 0);
+        list.insert('2', 0);
+        list.insert('3', 0);
+        expect(list.get(2)).toEqual('1');
+    });
 });

@@ -139,8 +139,31 @@ datastructs.LinkedList = function() {
         len--;
         return removedNode;
     };
+    
+    /**
+     * get
+     * 
+     * returns the value at the given index
+     * throws an exception if the index is out of range
+     */
+    var get = function(index) {
+        if (index < 0 || index >= len) {
+            throw new Error("OutOfBoundsException: index " + index + " is not within 0 and " + len);
+        }
+
+        var currIndex = 0;
+        var curr = head;
+        
+        while (currIndex != index) {
+            curr = curr.next;
+            currIndex++;
+        }
+        
+        return curr.item;
+    };
 
     return {
+        get: get,
         remove: remove,
         insert: insert,
         toString: toString,
