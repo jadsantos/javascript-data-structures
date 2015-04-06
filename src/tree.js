@@ -24,7 +24,6 @@ datastructs.Tree = function(item) {
      * returns the number of children this tree has
      */
     var numChildren = function() {
-        console.log('children = ', children);
         return children == null? 0 : children.length;
     };
     
