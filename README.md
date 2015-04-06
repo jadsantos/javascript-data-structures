@@ -8,3 +8,4 @@ These set of classes are Javascript implementations of common data structures. T
 Class List
 -------------
 - **LinkedList** - a singly-linked list
+- **Tree** - a tree, allowing any number of children
