@@ -14,6 +14,22 @@ describe('Tree', function() {
         expect(tree.hasChildren()).toEqual(true);
     });
     
+    it('should return correct size', function() {
+        var level = tree.insertChild('1');
+        level.insertChild('1.1');
+        level.insertChild('1.2');
+        level.insertChild('1.3');
+        level = tree.insertChild('2');
+        level.insertChild('2.1');
+        level.insertChild('2.2');
+        level.insertChild('2.3');
+        level = tree.insertChild('3');
+        level.insertChild('3.1');
+        level.insertChild('3.2');
+        level.insertChild('3.3');
+        expect(tree.size()).toEqual(13);    
+    });
+    
     it('should output one child', function() {
         tree.insertChild('1');
         expect(tree.toString()).toEqual('(0 (1))');
@@ -47,4 +63,26 @@ describe('Tree', function() {
         expect(tree.toString()).toEqual('(0 (1 (1.1 (1.1.1))))');
     });
 
+    it('should output one level bfs', function() {
+       tree.insertChild('1');
+       tree.insertChild('2');
+       tree.insertChild('3');
+       expect(tree.toStringBfs()).toEqual('(0, 1, 2, 3)');
+    });
+
+    it('should output two level bfs', function() {
+       var level = tree.insertChild('1');
+       level.insertChild('1.1');
+       level.insertChild('1.2');
+       level.insertChild('1.3');
+       level = tree.insertChild('2');
+       level.insertChild('2.1');
+       level.insertChild('2.2');
+       level.insertChild('2.3');
+       level = tree.insertChild('3');
+       level.insertChild('3.1');
+       level.insertChild('3.2');
+       level.insertChild('3.3');
+       expect(tree.toStringBfs()).toEqual('(0, 1, 2, 3, 1.1, 1.2, 1.3, 2.1, 2.2, 2.3, 3.1, 3.2, 3.3)');
+    });
 });

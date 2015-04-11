@@ -8,7 +8,7 @@ datastructs.Tree = function(item) {
      */
     var item = item;
     var children = null;
-    
+
     /**
      * hasChildren
      * 
@@ -28,6 +28,22 @@ datastructs.Tree = function(item) {
     };
     
     /**
+     * size
+     * 
+     * total number of nodes in the tree
+     */
+    var size = function() {
+        // perform a breadth-first search
+        var count = 0;
+        
+        visitBfs(function(item, index) {
+            count++;
+        });
+        
+        return count;
+    };
+    
+    /**
      * insertChild
      * 
      * Adds a child node to the end of the children,
@@ -43,18 +59,33 @@ datastructs.Tree = function(item) {
         children.push(newNode);
 
         return newNode;
-    };    
+    }; 
+    
+    /**
+     * child
+     * 
+     * returns the child at the given index
+     */
+    var child = function(index) {
+        var result = null;
+        
+        if (hasChildren()) {
+            result = children[index];
+        }    
+        
+        return result;
+    };
     
     /**
      * visitDfs
      *
      * performs a depth-first search of the tree
      */
-    var visitDfs = function(visit, index, num) {
-        visit(item, index, num, 'start');
+    var visitDfs = function(visit, index, length) {
+        visit(item, index, length, 'start');
         
         if (hasChildren()) {
-            visit(item, index, num, 'beforechildren');
+            visit(item, index, length, 'beforechildren');
             var position = '';
 
             for (var i = 0; i < children.length; i++) {
@@ -71,12 +102,35 @@ datastructs.Tree = function(item) {
                     position = '';
                 }
                 
-                visit(item, index, num, 'beforechildvisit' + position);
+                visit(item, index, length, 'beforechildvisit' + position);
                 children[i].visitDfs(visit, i, children.length);
-                visit(item, index, num, 'afterchildvisit' + position);
+                visit(item, index, length, 'afterchildvisit' + position);
             }
 
-            visit(item, index, num, 'afterchildren');
+            visit(item, index, length, 'afterchildren');
+        }
+    };
+    
+    /**
+     * visitBfs
+     * 
+     * Performs a breadth-first search of the tree
+     * 
+     */
+    var visitBfs = function(visit) {
+        var i = 0;
+        var track = [self];
+
+        while (i < track.length) {
+            visit(track[i].item, i);
+            
+            if (track[i].hasChildren()) {
+                for (var j = 0;  j < track[i].numChildren();  j++) {
+                    track.push(track[i].child(j));
+                }
+            }
+            
+            i++;
         }
     };
     
@@ -110,12 +164,38 @@ datastructs.Tree = function(item) {
         return result;
     };
     
-    return {
+    /**
+     * toStringBfs
+     * 
+     * returns a string representing the tree in breadth first search order
+     */
+    var toStringBfs = function() {
+        var result = '(';
+
+        visitBfs(function(item, index) {
+            result += item;
+            result += ', ';
+        });
+        
+        result = result.substr(0, result.length - 2);
+        result += ')';
+        
+        return result;
+    };
+    
+    var self = {
         item: item,
         insertChild: insertChild,
+        child: child,
         hasChildren: hasChildren,
         numChildren: numChildren,
+        size: size,
         visitDfs: visitDfs,
-        toString: toString
+        visitBfs: visitBfs,
+        toString: toString,
+        toStringBfs: toStringBfs
     };
+    
+    return self;
+    
 };
