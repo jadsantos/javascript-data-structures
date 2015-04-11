@@ -81,7 +81,7 @@ datastructs.Tree = function(item) {
      *
      * performs a depth-first search of the tree
      */
-    var visitDfs = function(visit, index, length) {
+    var visitPreOrder = function(visit, index, length) {
         visit(item, index, length, 'start');
         
         if (hasChildren()) {
@@ -103,7 +103,7 @@ datastructs.Tree = function(item) {
                 }
                 
                 visit(item, index, length, 'beforechildvisit' + position);
-                children[i].visitDfs(visit, i, children.length);
+                children[i].visitPreOrder(visit, i, children.length);
                 visit(item, index, length, 'afterchildvisit' + position);
             }
 
@@ -135,14 +135,33 @@ datastructs.Tree = function(item) {
     };
     
     /**
+     * visitPostOrder
+     * 
+     * Performs an post-order traversal of the tree
+     */
+    var visitPostOrder = function(node, visit) {
+        if (node === null) {
+            node = self;
+        }
+        
+        if (node.hasChildren()) {
+            for (var i = 0;  i < node.numChildren();  i++) {
+                visitPostOrder(node.child(i), visit);
+            }
+        }
+        
+        visit(node.item);
+    };
+    
+    /**
      *  toString
      * 
-     *  A rudimentary plaintext representation of the tree
+     *  A pre-order representation of the tree
      */
     var toString = function() {
         var result = '(';
         
-        visitDfs(function(item, index, length, context) {
+        visitPreOrder(function(item, index, length, context) {
             if (context === 'start') {
                 result += item;
             }
@@ -183,6 +202,20 @@ datastructs.Tree = function(item) {
         return result;
     };
     
+    var toStringPostOrder = function() {
+        var result = '(';
+        
+        visitPostOrder(null, function(item) {
+            result += item;
+            result += ', ';
+        });
+        
+        result = result.substr(0, result.length - 2);
+        result += ')';
+        
+        return result;
+    };
+    
     var self = {
         item: item,
         insertChild: insertChild,
@@ -190,10 +223,12 @@ datastructs.Tree = function(item) {
         hasChildren: hasChildren,
         numChildren: numChildren,
         size: size,
-        visitDfs: visitDfs,
+        visitPreOrder: visitPreOrder,
+        visitPostOrder: visitPostOrder,
         visitBfs: visitBfs,
         toString: toString,
-        toStringBfs: toStringBfs
+        toStringBfs: toStringBfs,
+        toStringPostOrder: toStringPostOrder
     };
     
     return self;
